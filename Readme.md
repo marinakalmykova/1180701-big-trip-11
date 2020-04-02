@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Marina Kalmykova](https://up.htmlacademy.ru/ecmascript/11/user/1180701).
-* Наставник: `Неизвестно`.
+* Наставник: `Кексобот`.
 
 ---
 
