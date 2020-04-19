@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const createMenuFilterMarkup = (filter, isChecked) => {
   return (
     `<div class="trip-filters__filter">
@@ -7,7 +9,7 @@ const createMenuFilterMarkup = (filter, isChecked) => {
   );
 };
 
-export const createMenuFiltersTemplate = (menuFilters) => {
+const createMenuFiltersTemplate = (menuFilters) => {
   const menuFiltersMarkup = menuFilters.map((it, i) => createMenuFilterMarkup(it, i === 0)).join(`\n`);
   return (
     `<form class="trip-filters" action="#" method="get">
@@ -16,3 +18,26 @@ export const createMenuFiltersTemplate = (menuFilters) => {
             </form>`
   );
 };
+
+export default class MenuFilters {
+  constructor(menuFilters) {
+    this._menuFilters = menuFilters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuFiltersTemplate(this._menuFilters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
