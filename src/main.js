@@ -1,6 +1,7 @@
 import TripInfoComponent from "./components/trip-info.js";
 import MenuControlsComponent from "./components/menu-controls.js";
 import MenuFiltersComponent from "./components/menu-filters.js";
+import NoTripItems from "./components/no-trip-items";
 import SortComponent from "./components/sort.js";
 import TripEventEditComponent from "./components/trip-event-edit.js";
 import TripListComponent from "./components/trip-list.js";
@@ -18,18 +19,33 @@ const tripEvents = generateEvents(EVENTS_COUNT).sort((a, b) => a.dates[0] - b.da
 const tripDates = Array.from(createTripDates(tripEvents));
 
 const renderTripEvent = (tripEvent, dayListElement) => {
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    if (isEscKey) {
+      replaceEditToTripEvent();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
   const tripEventComponent = new TripEventComponent(tripEvent);
   const tripEventEditComponent = new TripEventEditComponent(tripEvent);
 
+  const replaceEditToTripEvent = () => {
+    dayListElement.replaceChild(tripEventComponent.getElement(), tripEventEditComponent.getElement());
+  };
+
+  const replaceTripEventToEdit = () => {
+    dayListElement.replaceChild(tripEventEditComponent.getElement(), tripEventComponent.getElement());
+  };
+
   const openButton = tripEventComponent.getElement().querySelector(`.event__rollup-btn`);
   openButton.addEventListener(`click`, () => {
-    dayListElement.replaceChild(tripEventEditComponent.getElement(), tripEventComponent.getElement());
+    replaceTripEventToEdit();
+    document.addEventListener(`keydown`, onEscKeyDown);
   });
 
   const saveButton = tripEventEditComponent.getElement().querySelector(`.event__save-btn`);
-  saveButton.addEventListener(`click`, () => {
-    dayListElement.replaceChild(tripEventComponent.getElement(), tripEventEditComponent.getElement());
-  });
+  saveButton.addEventListener(`submit`, replaceEditToTripEvent);
 
   render(dayListElement, tripEventComponent.getElement(), RenderPosition.BEFOREEND);
 };
@@ -46,17 +62,22 @@ const menuFilters = generateMenuFilters();
 render(siteMainElement, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
 render(tripMenuElement, new MenuControlsComponent(menuControls).getElement(), RenderPosition.BEFOREEND);
 render(tripFilterElement, new MenuFiltersComponent(menuFilters).getElement(), RenderPosition.BEFOREEND);
-render(tripEventsElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
-render(tripEventsElement, new TripListComponent().getElement(), RenderPosition.BEFOREEND);
 
-const tripListElement = tripEventsElement.querySelector(`.trip-days`);
-tripDates.forEach((date, index) => {
-  render(tripListElement, new DayComponent(date, index).getElement(), RenderPosition.BEFOREEND);
-  const dayElement = document.getElementById(`${index}`);
-  render(dayElement, new DayListComponent().getElement(), RenderPosition.BEFOREEND);
-  const dayListElement = dayElement.querySelector(`.trip-events__list`);
-  const dayEvents = tripEvents.filter((it) => date === formatDateWithoutTime(it.dates[0]));
-  dayEvents.forEach((it) => renderTripEvent(it, dayListElement));
-});
+if (EVENTS_COUNT === 0) {
+  render(tripEventsElement, new NoTripItems().getElement(), RenderPosition.BEFOREEND);
+} else {
+  render(tripEventsElement, new SortComponent().getElement(), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new TripListComponent().getElement(), RenderPosition.BEFOREEND);
+
+  const tripListElement = tripEventsElement.querySelector(`.trip-days`);
+  tripDates.forEach((date, index) => {
+    render(tripListElement, new DayComponent(date, index).getElement(), RenderPosition.BEFOREEND);
+    const dayElement = document.getElementById(`${index}`);
+    render(dayElement, new DayListComponent().getElement(), RenderPosition.BEFOREEND);
+    const dayListElement = dayElement.querySelector(`.trip-events__list`);
+    const dayEvents = tripEvents.filter((it) => date === formatDateWithoutTime(it.dates[0]));
+    dayEvents.forEach((it) => renderTripEvent(it, dayListElement));
+  });
+}
 
 
