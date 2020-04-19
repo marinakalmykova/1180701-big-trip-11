@@ -1,5 +1,5 @@
 import {EVENT_TYPES, DESTINATIONS} from "../mock/trip-event.js";
-import {formatDate} from "../utils";
+import {createElement, formatDate} from "../utils";
 
 const createEventTypesMarkup = (types, currentType = `flight`) => {
   return types
@@ -41,7 +41,7 @@ const createPhoto = (photoURL) => {
   return `<img class="event__photo" src="${photoURL}" alt="Event photo">`;
 };
 
-export const createTripEventEditTemplate = (tripEvent) => {
+const createTripEventEditTemplate = (tripEvent) => {
   const {type, destination, dates, price, offers, description, photos} = tripEvent;
   const start = formatDate(dates[0]);
   const end = formatDate(dates[1]);
@@ -130,3 +130,27 @@ export const createTripEventEditTemplate = (tripEvent) => {
           </form>`
   );
 };
+
+export default class TripEventEdit {
+  constructor(tripEvent) {
+    this._tripEvent = tripEvent;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripEventEditTemplate(this._tripEvent);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
