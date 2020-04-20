@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const createMenuControlMarkup = (control, isActive) => {
   return (
@@ -15,25 +15,13 @@ const createMenuControlsTemplate = (controls) => {
   );
 };
 
-export default class MenuControls {
+export default class MenuControls extends AbstractComponent {
   constructor(controls) {
+    super();
     this._controls = controls;
-    this._element = null;
   }
 
   getTemplate() {
     return createMenuControlsTemplate(this._controls);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
