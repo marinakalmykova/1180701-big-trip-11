@@ -1,5 +1,6 @@
+import AbstractComponent from "./abstract-component.js";
 import {EVENT_TYPES, DESTINATIONS} from "../mock/trip-event.js";
-import {createElement, formatDate} from "../utils";
+import {formatDate} from "../utils/common.js";
 
 const createEventTypesMarkup = (types, currentType = `flight`) => {
   return types
@@ -131,26 +132,18 @@ const createTripEventEditTemplate = (tripEvent) => {
   );
 };
 
-export default class TripEventEdit {
+export default class TripEventEdit extends AbstractComponent {
   constructor(tripEvent) {
+    super();
     this._tripEvent = tripEvent;
-
-    this._element = null;
   }
 
   getTemplate() {
     return createTripEventEditTemplate(this._tripEvent);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`.event__save-btn`)
+      .addEventListener(`submit`, handler);
   }
 }

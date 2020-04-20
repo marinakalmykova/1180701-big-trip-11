@@ -1,4 +1,5 @@
-import {createElement, formatDateWithoutTime} from "../utils";
+import AbstractComponent from "./abstract-component.js";
+import {formatDateWithoutTime} from "../utils/common";
 
 export const createTripDates = (tripEvents) => {
   let dateSet = new Set();
@@ -18,27 +19,15 @@ const createDayTemplate = (date, index) => {
           </li>`;
 };
 
-export default class Day {
+export default class Day extends AbstractComponent {
   constructor(day, index) {
+    super();
     this._day = day;
     this._index = index;
-    this._element = null;
   }
 
   getTemplate() {
     return createDayTemplate(this._day, this._index);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

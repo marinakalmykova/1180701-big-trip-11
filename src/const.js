@@ -1,4 +1,4 @@
-export const TRIP_ITEMS_COUNT = 3;
+export const EVENTS_COUNT = 15;
 
 export const MONTH_SHORT_NAMES = [
   `JAN`,

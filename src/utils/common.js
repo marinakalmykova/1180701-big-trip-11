@@ -1,9 +1,6 @@
-import {MONTH_SHORT_NAMES} from "./const";
+import {MONTH_SHORT_NAMES} from "../const";
 
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
+
 
 const castDateFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
@@ -33,22 +30,4 @@ export const formatDuration = (duration) => {
   const days = Math.floor(hours / 24);
 
   return `${days !== 0 ? days + `D` : ``} ${hours !== 0 ? (hours - days * 24) + `H` : ``} ${minutes - hours * 60 + `M`}`;
-};
-
-export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-export const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-  }
 };
