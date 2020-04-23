@@ -12,10 +12,10 @@ const createOfferMarkup = (offer) => {
 };
 
 const createTripEventTemplate = (tripEvent) => {
-  const {type, destination, dates, price, offers} = tripEvent;
+  const {type, destination, dates, duration, price, offers} = tripEvent;
   const start = formatDate(dates[0]);
   const end = formatDate(dates[1]);
-  const duration = formatDuration(dates[1] - dates[0]);
+  const tripDuration = formatDuration(duration);
   const currency = `&euro;&nbsp;`;
 
   const offersMarkup = offers.map((offer) => createOfferMarkup(offer)).join(`\n`);
@@ -33,7 +33,7 @@ const createTripEventTemplate = (tripEvent) => {
                         &mdash;
                         <time class="event__end-time" datetime="${end}">${end}</time>
                       </p>
-                      <p class="event__duration">${duration}</p>
+                      <p class="event__duration">${tripDuration}</p>
                     </div>
 
                     <p class="event__price">

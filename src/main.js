@@ -7,6 +7,7 @@ import {generateMenuFilters, generateMenuControls} from "./mock/menu.js";
 import {generateEvents} from "./mock/trip-event.js";
 import {render, RenderPosition} from "./utils/render.js";
 import {EVENTS_COUNT} from "./const.js";
+import {SortType} from "./components/sort.js";
 
 const tripEvents = generateEvents(EVENTS_COUNT).sort((a, b) => a.dates[0] - b.dates[0]);
 const menuControls = generateMenuControls();
@@ -27,5 +28,5 @@ const tripEventsElement = document.querySelector(`.trip-events`);
 render(tripEventsElement, tripListComponent, RenderPosition.BEFOREEND);
 
 const tripController = new TripController(tripListComponent);
-tripController.render(tripEvents);
+tripController.render(tripEvents, SortType.EVENT);
 

@@ -1,9 +1,10 @@
 import NoTripEventsComponent from "../components/no-trip-events.js";
-import SortComponent from "../components/sort.js";
+import SortComponent, {SortType} from "../components/sort.js";
 import TripEventEditComponent from "../components/trip-event-edit.js";
 import DayListComponent from '../components/day-list.js';
 import TripEventComponent from "../components/trip-event.js";
 import DayComponent from "../components/day.js";
+import DayInfoComponent from "../components/day-info.js";
 import {createTripDates} from "../components/day.js";
 import {formatDateWithoutTime} from "../utils/common.js";
 import {render, replace, RenderPosition} from "../utils/render.js";
@@ -44,6 +45,36 @@ const renderTripEvent = (tripEvent, dayListElement) => {
   render(dayListElement, tripEventComponent, RenderPosition.BEFOREEND);
 };
 
+const renderTripEvents = (tripEvents, tripListElement) => {
+  tripEvents.forEach((it) => renderTripEvent(it, tripListElement));
+};
+
+const getSortedEvents = (tripEvents, sortType) => {
+  let sortedTripEvents = [];
+
+  switch (sortType) {
+    case SortType.PRICE:
+      sortedTripEvents = tripEvents.slice().sort((a, b) => b.price - a.price);
+      break;
+    case SortType.TIME:
+      sortedTripEvents = tripEvents.slice().sort((a, b) => b.duration - a.duration);
+      break;
+    case SortType.EVENT:
+      sortedTripEvents = tripEvents.slice();
+      break;
+  }
+  return sortedTripEvents;
+};
+
+const renderEventsList = (events, day = 0, index = 0) => {
+  const tripListElement = document.querySelector(`.trip-days`);
+  render(tripListElement, new DayComponent(day, index), RenderPosition.BEFOREEND);
+  const dayElement = document.getElementById(`${index}`);
+  render(dayElement, new DayListComponent(), RenderPosition.BEFOREEND);
+  const dayListElement = dayElement.querySelector(`.trip-events__list`);
+  renderTripEvents(events, dayListElement);
+};
+
 export default class TripController {
   constructor(container) {
     this._container = container.getElement();
@@ -63,12 +94,18 @@ export default class TripController {
 
       const tripListElement = document.querySelector(`.trip-days`);
       tripDates.forEach((day, index) => {
-        render(tripListElement, new DayComponent(day, index), RenderPosition.BEFOREEND);
-        const dayElement = document.getElementById(`${index}`);
-        render(dayElement, new DayListComponent(), RenderPosition.BEFOREEND);
-        const dayListElement = dayElement.querySelector(`.trip-events__list`);
         const dayEvents = tripEvents.filter((it) => day === formatDateWithoutTime(it.dates[0]));
-        dayEvents.forEach((it) => renderTripEvent(it, dayListElement));
+        renderEventsList(dayEvents, day, index);
+        const dayElement = document.getElementById(`${index}`);
+        const dayInfoElement = dayElement.querySelector(`.day__info`);
+        render(dayInfoElement, new DayInfoComponent(day, index), RenderPosition.BEFOREEND);
+      });
+
+      this._sortComponent.setSortTypeChangeHandler((sortType) => {
+        tripListElement.innerHTML = ``;
+        const sortedEvents = getSortedEvents(tripEvents, sortType);
+        renderEventsList(sortedEvents);
+        document.getElementById(`sort-${sortType}`).checked = true;
       });
     }
   }
