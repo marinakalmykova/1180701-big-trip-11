@@ -12,10 +12,7 @@ export const createTripDates = (tripEvents) => {
 
 const createDayTemplate = (date, index) => {
   return `<li class="trip-days__item  day" id="${index}">
-              <div class="day__info">
-                <span class="day__counter">${index + 1}</span>
-                <time class="day__date" datetime="${date}">${date}</time>
-              </div>
+         <div class="day__info"></div>
           </li>`;
 };
 

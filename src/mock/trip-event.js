@@ -123,11 +123,17 @@ export const generateDescription = () => {
     .join(` `);
 };
 
+const getDuration = (dates) => {
+  return dates[1] - dates[0];
+};
+
 const generateEvent = () => {
+  const dates = getRandomTripDates();
   return {
     type: getRandomArrayItem(EVENT_TYPES),
     destination: getRandomArrayItem(DESTINATIONS),
-    dates: getRandomTripDates(),
+    dates,
+    duration: getDuration(dates),
     price: getRandomPrice(),
     offers: generateOffersArray(),
     description: generateDescription(),
