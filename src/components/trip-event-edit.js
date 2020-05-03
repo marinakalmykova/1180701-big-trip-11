@@ -1,8 +1,10 @@
 import AbstractSmartComponent from './abstract-smart-component.js';
 import {EVENT_TYPES, DESTINATIONS} from "../mock/trip-event.js";
-import {formatDate} from "../utils/common.js";
+import {formatDate, formatTime} from "../utils/common.js";
 import {generateDescription, generateOffersArray} from '../mock/trip-event.js';
-
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import 'flatpickr/dist/themes/light.css';
 
 const createEventTypesMarkup = (types, currentType = `flight`) => {
   return types
@@ -46,8 +48,8 @@ const createPhoto = (photoURL) => {
 
 const createTripEventEditTemplate = (tripEvent) => {
   const {type, destination, dates, price, offers, description, photos, isFavorite} = tripEvent;
-  const start = formatDate(dates[0]);
-  const end = formatDate(dates[1]);
+  const start = formatDate(dates[0]) + ` ` + formatTime(dates[0]);
+  const end = formatDate(dates[1] + ` ` + formatTime(dates[1]));
   const currency = `&euro;&nbsp;`;
 
   const eventTransferTypesMarkup = createEventTypesMarkup(EVENT_TYPES.filter((it) => it.type === `transfer`), type);
@@ -145,8 +147,12 @@ export default class TripEventEdit extends AbstractSmartComponent {
   constructor(tripEvent) {
     super();
     this._tripEvent = tripEvent;
+    this._flatpickr = null;
+
     this._submitHandler = null;
     this._favouriteHandler = null;
+    this._subscribeOnEvents();
+    this._applyFlatpickr();
   }
 
   getTemplate() {
@@ -161,6 +167,7 @@ export default class TripEventEdit extends AbstractSmartComponent {
 
   rerender() {
     super.rerender();
+    this._applyFlatpickr();
   }
 
   reset() {
@@ -182,6 +189,25 @@ export default class TripEventEdit extends AbstractSmartComponent {
       .addEventListener(`click`, handler);
     this._favouriteHandler = handler;
 
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+    const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
+    this._flatpickr = flatpickr(startDateElement, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._tripEvent.dates[0],
+    });
+    const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
+    this._flatpickr = flatpickr(endDateElement, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._tripEvent.dates[1],
+    });
   }
 
   _subscribeOnEvents() {
