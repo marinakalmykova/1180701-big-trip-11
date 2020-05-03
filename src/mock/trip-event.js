@@ -138,6 +138,7 @@ const generateEvent = () => {
     offers: generateOffersArray(),
     description: generateDescription(),
     photos: generatePhotosArray(),
+    isFavorite: false,
   };
 };
 
@@ -147,4 +148,4 @@ const generateEvents = (count) => {
     .map(generateEvent);
 };
 
-export {generateEvent, generateEvents, EVENT_TYPES, DESTINATIONS};
+export {generateEvent, generateEvents, EVENT_TYPES, DESTINATIONS, DESCRIPTIONS, OFFERS};
