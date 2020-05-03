@@ -1,26 +1,25 @@
-import {MONTH_SHORT_NAMES} from "../const";
+import moment from 'moment';
 
+export const getRandomArrayItem = (array) => {
+  const randomIndex = getRandomIntegerNumber(0, array.length);
 
+  return array[randomIndex];
+};
 
-const castDateFormat = (value) => {
-  return value < 10 ? `0${value}` : String(value);
+export const getRandomIntegerNumber = (min, max) => {
+  return min + Math.floor(Math.random() * (max - min));
+};
+
+export const formatTime = (date) => {
+  return moment(date).format(`hh:mm`);
 };
 
 export const formatDate = (date) => {
-  const dd = castDateFormat(date.getDate());
-  const mm = castDateFormat(date.getMonth() + 1);
-  const yy = castDateFormat(date.getFullYear() % 100);
-  const hours = castDateFormat(date.getUTCHours());
-  const minutes = castDateFormat(date.getUTCMinutes());
-
-  return dd + `/` + mm + `/` + yy + ` ` + hours + `:` + minutes;
+  return moment(date).format(`DD/MM/YY`);
 };
 
 export const formatDateWithoutTime = (date) => {
-  const dd = castDateFormat(date.getDate());
-  const mm = MONTH_SHORT_NAMES[date.getMonth()];
-
-  return mm + ` ` + dd;
+  return moment(date).format(`MMM Do`);
 };
 
 export const formatDuration = (duration) => {

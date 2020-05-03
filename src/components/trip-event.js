@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {formatDate, formatDuration} from "../utils/common";
+import {formatTime, formatDuration} from "../utils/common";
 
 const createOfferMarkup = (offer) => {
   return (
@@ -13,8 +13,8 @@ const createOfferMarkup = (offer) => {
 
 const createTripEventTemplate = (tripEvent) => {
   const {type, destination, dates, duration, price, offers} = tripEvent;
-  const start = formatDate(dates[0]);
-  const end = formatDate(dates[1]);
+  const start = formatTime(dates[0]);
+  const end = formatTime(dates[1]);
   const tripDuration = formatDuration(duration);
   const currency = `&euro;&nbsp;`;
 
