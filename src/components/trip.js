@@ -1,12 +1,12 @@
 import AbstractComponent from "./abstract-component.js";
 
-const createTripListTemplate = () => {
+const createTripTemplate = () => {
   return `<ul class="trip-days">
           </ul>`;
 };
 
-export default class TripList extends AbstractComponent {
+export default class Trip extends AbstractComponent {
   getTemplate() {
-    return createTripListTemplate();
+    return createTripTemplate();
   }
 }

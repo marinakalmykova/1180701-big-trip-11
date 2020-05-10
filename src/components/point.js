@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {formatTime, formatDuration} from "../utils/common";
+import {formatDuration} from "../utils/common";
 
 const createOfferMarkup = (offer) => {
   return (
@@ -11,10 +11,8 @@ const createOfferMarkup = (offer) => {
   );
 };
 
-const createTripEventTemplate = (tripEvent) => {
-  const {type, destination, dates, duration, price, offers} = tripEvent;
-  const start = formatTime(dates[0]);
-  const end = formatTime(dates[1]);
+const createPointTemplate = (point) => {
+  const {type, destination, startTime, endTime, duration, price, offers} = point;
   const tripDuration = formatDuration(duration);
   const currency = `&euro;&nbsp;`;
 
@@ -29,9 +27,9 @@ const createTripEventTemplate = (tripEvent) => {
 
                     <div class="event__schedule">
                       <p class="event__time">
-                        <time class="event__start-time" datetime="${start}">${start}</time>
+                        <time class="event__start-time" datetime="${startTime}">${startTime}</time>
                         &mdash;
-                        <time class="event__end-time" datetime="${end}">${end}</time>
+                        <time class="event__end-time" datetime="${endTime}">${endTime}</time>
                       </p>
                       <p class="event__duration">${tripDuration}</p>
                     </div>
@@ -52,14 +50,14 @@ const createTripEventTemplate = (tripEvent) => {
                 </li>`;
 };
 
-export default class TripEvent extends AbstractComponent {
-  constructor(tripEvent) {
+export default class Point extends AbstractComponent {
+  constructor(point) {
     super();
-    this._tripEvent = tripEvent;
+    this._point = point;
   }
 
   getTemplate() {
-    return createTripEventTemplate(this._tripEvent);
+    return createPointTemplate(this._point);
   }
 
   setOpenButtonClickHandler(handler) {

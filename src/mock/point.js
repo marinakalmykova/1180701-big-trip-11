@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomIntegerNumber} from '../utils/common';
+import {getRandomArrayItem, getRandomIntegerNumber, getTime} from '../utils/common';
 
 const EVENT_TYPES = [
   {
@@ -115,17 +115,23 @@ export const generateDescription = () => {
     .join(` `);
 };
 
-const getDuration = (dates) => {
-  return dates[1] - dates[0];
-};
-
 const generateEvent = () => {
   const dates = getRandomTripDates();
+  const start = dates[0];
+  const end = dates[1];
+  const startTime = getTime(start);
+  const endTime = getTime(end);
+  const duration = end - start;
+
   return {
+    id: String(new Date() + Math.random()),
     type: getRandomArrayItem(EVENT_TYPES),
     destination: getRandomArrayItem(DESTINATIONS),
-    dates,
-    duration: getDuration(dates),
+    start,
+    end,
+    startTime,
+    endTime,
+    duration,
     price: getRandomPrice(),
     offers: generateOffersArray(),
     description: generateDescription(),
