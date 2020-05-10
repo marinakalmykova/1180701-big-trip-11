@@ -1,32 +1,59 @@
 import TripInfoComponent from "./components/trip-info.js";
-import MenuControlsComponent from "./components/menu-controls.js";
-import MenuFiltersComponent from "./components/menu-filters.js";
-import TripListComponent from "./components/trip-list.js";
+import MenuComponent from "./components/menu.js";
+import FilterController from "./controllers/filter.js";
+import TripCostComponent from "./components/trip-cost.js";
 import TripController from "./controllers/trip";
-import {generateMenuFilters, generateMenuControls} from "./mock/menu.js";
-import {generateEvents} from "./mock/trip-event.js";
+import PointsModel from "./models/points.js";
+import {generateEvents} from "./mock/point.js";
 import {render, RenderPosition} from "./utils/render.js";
 import {EVENTS_COUNT} from "./const.js";
-import {SortType} from "./components/sort.js";
 
-const tripEvents = generateEvents(EVENTS_COUNT).sort((a, b) => a.dates[0] - b.dates[0]);
-const menuControls = generateMenuControls();
-const menuFilters = generateMenuFilters();
+const points = generateEvents(EVENTS_COUNT);
+const pointsModel = new PointsModel();
+pointsModel.setPoints(points);
+
+
+const countTripPrice = () => {
+  const tripPrices = [];
+  const offerPrices = [];
+
+  points.forEach((item) => {
+    tripPrices.push(item.price);
+  });
+
+  points.forEach((item) => {
+    item.offers.forEach((element) => {
+      offerPrices.push(+element.price);
+    });
+  });
+
+  return [...tripPrices, ...offerPrices].reduce((sum, current) => {
+    return sum + current;
+  }, 0);
+};
 
 const siteMainElement = document.querySelector(`.trip-main`);
 render(siteMainElement, new TripInfoComponent(), RenderPosition.AFTERBEGIN);
 
 const tripControlElement = document.querySelector(`.trip-controls`);
 const tripMenuElement = tripControlElement.querySelector(`.trip-tabs`);
-render(tripMenuElement, new MenuControlsComponent(menuControls), RenderPosition.BEFOREEND);
+render(tripMenuElement, new MenuComponent(), RenderPosition.AFTEREND);
+
+const tripInfoElement = document.querySelector(`.trip-info`);
+render(tripInfoElement, new TripCostComponent(countTripPrice()), RenderPosition.BEFOREEND);
 
 const tripFilterElement = tripControlElement.querySelector(`.trip-filters`);
-render(tripFilterElement, new MenuFiltersComponent(menuFilters), RenderPosition.BEFOREEND);
+const filterController = new FilterController(tripFilterElement, pointsModel);
+filterController.render();
 
-const tripListComponent = new TripListComponent();
 const tripEventsElement = document.querySelector(`.trip-events`);
-render(tripEventsElement, tripListComponent, RenderPosition.BEFOREEND);
+const tripController = new TripController(tripEventsElement, pointsModel);
+tripController.render();
 
-const tripController = new TripController(tripListComponent);
-tripController.render(tripEvents, SortType.EVENT);
+const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
+newEventButton.addEventListener(`click`, () => {
+  tripController.createPoint();
+  filterController.render();
+  newEventButton.disabled = true;
+});

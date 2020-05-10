@@ -1,16 +1,9 @@
 export const EVENTS_COUNT = 15;
 
-export const MONTH_SHORT_NAMES = [
-  `JAN`,
-  `FEB`,
-  `MAR`,
-  `APR`,
-  `MAY`,
-  `JUN`,
-  `JUL`,
-  `AUG`,
-  `SEP`,
-  `OCT`,
-  `NOV`,
-  `DEC`,
-];
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
+
+export const HIDDEN_CLASS = `visually-hidden`;
