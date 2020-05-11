@@ -4,7 +4,7 @@ import DayInfoComponent from "../components/day-info.js";
 import TripComponent from "../components/trip.js";
 import PointController, {Mode as PointControllerMode, EmptyPoint} from "./point.js";
 import {FilterType} from "../const.js";
-import {render, RenderPosition} from "../utils/render.js";
+import {render, remove, RenderPosition} from "../utils/render.js";
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
@@ -89,6 +89,25 @@ export default class TripController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
+  hide() {
+    if (this._creatingPoint) {
+      this._creatingPoint.destroy();
+      this._creatingPoint = null;
+    }
+    this._onViewChange();
+    this._sortComponent.hide();
+    this._tripComponent.hide();
+  }
+
+  show() {
+    this._setSortStateDefault();
+    this._sortComponent.show();
+    this._tripComponent.show();
+    this._renderPoints(this._container, this._pointsModel.getPoints());
+
+    // this._renderTripDays();
+  }
+
   render() {
     const container = this._container;
     const points = this._pointsModel.getPoints();
@@ -133,6 +152,13 @@ export default class TripController {
   _renderTripDay(container, points) {
     const newPoints = renderTripDay(container, points, this._onDataChange, this._onViewChange);
     this._pointControllers = newPoints;
+  }
+
+  _setSortStateDefault() {
+    this._sortComponent.resetSortType();
+    remove(this._sortComponent);
+    render(this._container, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
   _onDataChange(pointController, oldData, newData) {
