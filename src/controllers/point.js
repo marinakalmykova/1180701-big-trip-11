@@ -14,14 +14,12 @@ export const Mode = {
 
 export const EmptyPoint = {
   type: `flight`,
-  destination: ` `,
+  destination: ``,
   start: new Date().toISOString(),
   end: new Date().toISOString(),
-  price: ` `,
-  description: ` `,
+  price: ``,
+  description: ``,
   isFavorite: false,
-  photos: [],
-  offers: [],
 };
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
