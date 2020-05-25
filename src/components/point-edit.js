@@ -2,7 +2,7 @@ import AbstractSmartComponent from './abstract-smart-component.js';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import 'flatpickr/dist/themes/light.css';
-import {ActivityTypes, DefaultType, TransportTypes} from "../const";
+import {ActivityTypes, DefaultType, HIDDEN_CLASS, TransportTypes} from "../const";
 
 const DefaultData = {
   deleteButtonText: `Delete`,
@@ -144,14 +144,14 @@ const createPointEditTemplate = (point, mode, activeOffers, offers, destinations
             </header>
             <section class="event__details">
               <section class="event__section  event__section--offers">
-                <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+                <h3 class="event__section-title  event__section-title--offers ${offersMarkup ? `` : HIDDEN_CLASS}">Offers</h3>
 
                 <div class="event__available-offers">
                   ${offersMarkup}
                 </div>
               </section>
               <section class="event__section  event__section--destination">
-                <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                <h3 class="event__section-title  event__section-title--destination ${description ? `` : HIDDEN_CLASS}">Destination</h3>
                 <p class="event__destination-description">${description}</p>
                 <div class="event__photos-container">
                   <div class="event__photos-tape">
@@ -163,6 +163,7 @@ const createPointEditTemplate = (point, mode, activeOffers, offers, destinations
           </form>`
   );
 };
+
 
 export default class PointEdit extends AbstractSmartComponent {
   constructor(point, mode, offers, destinations) {
