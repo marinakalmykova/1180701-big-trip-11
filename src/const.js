@@ -1,5 +1,3 @@
-export const EVENTS_COUNT = 15;
-
 export const FilterType = {
   EVERYTHING: `everything`,
   FUTURE: `future`,
@@ -7,3 +5,24 @@ export const FilterType = {
 };
 
 export const HIDDEN_CLASS = `visually-hidden`;
+
+export const TransportTypes = [
+  `bus`,
+  `drive`,
+  `flight`,
+  `ship`,
+  `taxi`,
+  `train`,
+  `transport`
+];
+
+export const ActivityTypes = [
+  `check-in`,
+  `sightseeing`,
+  `restaurant`,
+];
+
+export const DefaultType = `flight`;
+
+export const OFFERS_LIMIT = 3;
+

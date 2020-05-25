@@ -23,7 +23,7 @@ export default class FilterController {
     const filters = Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
-        checked: filterType === this._activeFilterType,
+        isChecked: filterType === this._activeFilterType,
       };
     });
     const oldComponent = this._filterComponent;

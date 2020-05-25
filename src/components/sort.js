@@ -45,7 +45,6 @@ export default class Sort extends AbstractSmartComponent {
   constructor() {
     super();
     this._handler = null;
-
     this._currentSortType = SortType.EVENT;
   }
 

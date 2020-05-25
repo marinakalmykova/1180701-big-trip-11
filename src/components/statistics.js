@@ -2,7 +2,7 @@ import AbstractSmartComponent from './abstract-smart-component.js';
 import Chart from 'chart.js';
 import moment from 'moment';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {EVENT_TYPES} from "../mock/point";
+import {TransportTypes} from "../const.js";
 
 const LegendName = {
   MONEY: `MONEY`,
@@ -16,7 +16,6 @@ const LabelName = {
   HOURS: `H`
 };
 
-const transportTypes = EVENT_TYPES.filter((it) => it.type === `transfer`);
 
 const generateChartData = (legendName, points) => {
   const labels = [
@@ -33,7 +32,7 @@ const generateChartData = (legendName, points) => {
         .filter((point) => point.value !== 0)
         .sort((a, b) => b.value - a.value);
     case LegendName.TRANSPORT:
-      return transportTypes.map((label) => ({
+      return TransportTypes.map((label) => ({
         label, value: points.filter((point) => point.type === label).length
       }))
         .filter((point) => point.value !== 0)
@@ -42,7 +41,7 @@ const generateChartData = (legendName, points) => {
     case LegendName.TIME:
       return labels.map((label) => ({
         label, value: points.filter((point) => point.type === label)
-          .reduce((acc, curr) => acc + Math.round(moment.duration(curr.end - curr.start, `milliseconds`) / (60 * 60 * 1000)), 0)
+          .reduce((acc, curr) => acc + Math.round(moment.duration(moment(curr.end) - moment(curr.start), `milliseconds`) / (60 * 60 * 1000)), 0)
       }))
         .filter((point) => point.value !== 0)
         .sort((a, b) => b.value - a.value);
@@ -56,7 +55,7 @@ const renderChart = (ctx, data, label, legend) => {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: data.map((item) => item.label.name.toUpperCase()),
+      labels: data.map((item) => item.label.toUpperCase()),
       datasets: [{
         data: data.map((item) => item.value),
         backgroundColor: `#FFFFFF`,
@@ -186,11 +185,8 @@ export default class Statistics extends AbstractSmartComponent {
     const timeSpendCtx = element.querySelector(`.statistics__chart--time`);
 
     this._resetCharts();
-
     this._moneyChart = renderChart(moneyCtx, generateChartData(`MONEY`, points), LabelName.EURO, LegendName.MONEY);
-
     this._transportChart = renderChart(transportCtx, generateChartData(`TRANSPORT`, points), LabelName.PIECES, LegendName.TRANSPORT);
-
     this._timeSpendChart = renderChart(timeSpendCtx, generateChartData(`TIME-SPENT`, points), LabelName.HOURS, LegendName.TIME);
 
   }
