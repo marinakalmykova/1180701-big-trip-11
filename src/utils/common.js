@@ -21,18 +21,19 @@ export const getDate = () => {
 };
 
 export const getTime = (date) => {
-  return moment(date).format(`HH:MM`);
+  return moment(date).format(`HH:mm`);
 };
 
 export const formatDate = (date) => {
-  return moment(date).format(`DD/MM/YY`);
+  return moment(date).format(`DD/MM/YY HH:mm`);
 };
 
 export const formatDateWithoutTime = (date) => {
   return moment(date).format(`MMM Do`);
 };
 
-export const formatDuration = (duration) => {
+export const getDuration = (end, start) => {
+  const duration = moment.duration(moment(end) - moment(start));
   const seconds = Math.round(duration / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -42,9 +43,9 @@ export const formatDuration = (duration) => {
 };
 
 export const isPastDate = (eventDate, date) => {
-  return eventDate < date;
+  return new Date(eventDate) < new Date(date);
 };
 
 export const isFutureDate = (eventDate, date) => {
-  return eventDate >= date;
+  return new Date(eventDate) >= new Date(date);
 };

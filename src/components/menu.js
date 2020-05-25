@@ -1,39 +1,35 @@
 import AbstractComponent from "./abstract-component.js";
 
-export const Tabs = [`Table`, `Stats`];
-
-const createMenuMarkup = (control, isActive) => {
-  return (
-    `<a class="trip-tabs__btn ${isActive ? `trip-tabs__btn--active` : ``}" href="#">${control}</a>`
-  );
+export const Tabs = {
+  TABLE: `Table`,
+  STATS: `Stats`,
 };
 
-const createMenuTemplate = (controls) => {
-  const menuMarkup = controls.map((it) => createMenuMarkup(it, it.checked)).join(`\n`);
+const TAB = `trip-tabs__btn`;
+const TAB_ACTIVE = `trip-tabs__btn--active`;
 
+const createMenuTemplate = () => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
-              ${menuMarkup}
-            </nav>`
+       <a class="trip-tabs__btn trip-tabs__btn--active"href="#">Table</a>
+       <a class="trip-tabs__btn"href="#">Stats</a>
+     </nav>`
   );
 };
 
 export default class Menu extends AbstractComponent {
-  constructor() {
-    super();
-  }
-
   getTemplate() {
-    return createMenuTemplate(Tabs);
+    return createMenuTemplate();
   }
 
-  setActiveTab(tabActive, tabInactive) {
-    const itemActive = this.getElement().querySelector(`#${tabActive}`);
-    const itemInactive = this.getElement().querySelector(`#${tabInactive}`);
+  _setTabActive(tabActive) {
+    const tabElements = this.getElement().querySelectorAll(`.${TAB}`);
 
-    if (itemActive) {
-      itemActive.classList.add(`trip-tabs__btn--active`);
-      itemInactive.classList.remove(`trip-tabs__btn--active`);
+    for (const tabElement of tabElements) {
+      tabElement.classList.remove(TAB_ACTIVE);
+      if (tabElement.textContent === tabActive) {
+        tabElement.classList.add(TAB_ACTIVE);
+      }
     }
   }
 
@@ -43,9 +39,13 @@ export default class Menu extends AbstractComponent {
         return;
       }
 
-      const tab = evt.target.id;
-
+      const tab = evt.target.textContent;
+      this._setTabActive(tab);
       handler(tab);
     });
+  }
+
+  setDefault() {
+    this._setTabActive(Tabs.TABLE);
   }
 }
