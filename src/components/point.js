@@ -5,7 +5,7 @@ import {TransportTypes, OFFERS_LIMIT} from "../const";
 
 const createOffersMarkup = (offers) => {
   if (offers.length > OFFERS_LIMIT) {
-    offers = offers.slice(0, 3);
+    offers = offers.slice(0, OFFERS_LIMIT);
   }
   return offers
     .map((offer) => {

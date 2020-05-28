@@ -1,6 +1,7 @@
 import Point from "./models/point.js";
 import Destination from "./models/destination.js";
 import Offer from "./models/offer.js";
+import {MAX_OK_STATUS, MIN_OK_STATUS} from "./const.js";
 
 const Method = {
   GET: `GET`,
@@ -10,7 +11,7 @@ const Method = {
 };
 
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= MIN_OK_STATUS && response.status < MAX_OK_STATUS) {
     return response;
   } else {
     throw new Error(`${response.status}: ${response.statusText}`);
