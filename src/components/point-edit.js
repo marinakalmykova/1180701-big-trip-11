@@ -36,7 +36,7 @@ const createDestinationsListMarkup = (destinations) => {
 const createOffersMarkup = (offers, allOffers) => {
   return allOffers
     .map((offer, index) => {
-      const isChecked = offers.filter((it) => it.title === offer.title).length > 0;
+      const isChecked = offers.length > 0 ? offers.filter((it) => it.title === offer.title).length > 0 : false;
       return (
         `<div class="event__offer-selector">
             <input class="event__offer-checkbox  visually-hidden" 
@@ -64,14 +64,14 @@ const createPhotosMarkup = (photos) => {
 const createPointEditTemplate = (point, mode, activeOffers, offers, destinations, externalData) => {
   const {type, destination, start, end, price, description, photos, isFavorite} = point;
   const currency = `&euro;&nbsp;`;
-  const typeOffers = (offers.filter((offer) => offer.type === point.type))[0].offers;
+  // const typeOffers = (offers.filter((offer) => offer.type === point.type))[0].offers;
   const eventTransferTypesMarkup = createEventTypesMarkup(TransportTypes, type);
   const eventActivityTypesMarkup = createEventTypesMarkup(ActivityTypes, type);
   const destinationsMarkup = createDestinationsListMarkup(destinations);
   const hasOffers = Array.isArray(offers) && offers.length;
   const hasPhotos = Array.isArray(photos) && photos.length;
 
-  const offersMarkup = hasOffers ? createOffersMarkup(activeOffers, typeOffers) : [];
+  const offersMarkup = hasOffers ? createOffersMarkup(activeOffers, offers) : [];
   const photosMarkup = hasPhotos ? createPhotosMarkup(photos) : [];
 
 
@@ -170,9 +170,9 @@ export default class PointEdit extends AbstractSmartComponent {
     super();
     this._point = point;
     this._mode = mode;
-    this._offers = offers;
+    this._offers = (offers.filter((offer) => offer.type === point.type))[0].offers;
     this._destinations = destinations;
-    this._activeOffers = Object.assign([], point.offers);
+    this._activeOffers = point.offers;
     this._flatpickr = null;
     this._submitHandler = null;
     this._favouriteHandler = null;
@@ -209,9 +209,6 @@ export default class PointEdit extends AbstractSmartComponent {
   }
 
   reset() {
-    // const point = this._point;
-    // this._activeOffers = Object.assign([], point.offers);
-
     this.rerender();
   }
 
@@ -232,7 +229,7 @@ export default class PointEdit extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = document.querySelector(`.event--edit`);
+    const form = this.getElement();
     return new FormData(form);
   }
 
@@ -306,7 +303,7 @@ export default class PointEdit extends AbstractSmartComponent {
       offers.addEventListener(`change`, (evt) => {
         if (evt.target.checked) {
           this._activeOffers.push(this._offers.filter((it) => it.title === evt.target.value)[0]);
-          this.rerender();
+          // this.rerender();
         } else {
           const unCheckedIndex = this._activeOffers.findIndex((it) => it.title === evt.target.value);
           this._activeOffers.splice(unCheckedIndex, 1);

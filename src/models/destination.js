@@ -5,6 +5,14 @@ export default class Destination {
     this.pictures = data[`pictures`];
   }
 
+  toRAW() {
+    return {
+      description: this.description,
+      name: this.name,
+      pictures: this.pictures,
+    };
+  }
+
   static parseDestination(data) {
     return new Destination(data);
   }

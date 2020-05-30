@@ -26,3 +26,5 @@ export const DefaultType = `flight`;
 
 export const OFFERS_LIMIT = 3;
 
+export const MIN_OK_STATUS = 200;
+export const MAX_OK_STATUS = 300;
