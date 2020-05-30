@@ -93,6 +93,15 @@ apiWithProvider.getDestinations()
     tripController.render();
   });
 
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      // Действие, в случае успешной регистрации ServiceWorker
+    }).catch(() => {
+    // Действие, в случае ошибки при регистрации ServiceWorker
+    });
+});
+
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
 
