@@ -1,7 +1,7 @@
-import Point from "./models/point.js";
-import Destination from "./models/destination.js";
-import Offer from "./models/offer.js";
-import {MAX_OK_STATUS, MIN_OK_STATUS} from "./const.js";
+import Point from "../models/point.js";
+import Destination from "../models/destination.js";
+import Offer from "../models/offer.js";
+import {MAX_OK_STATUS, MIN_OK_STATUS} from "../const.js";
 
 const Method = {
   GET: `GET`,
@@ -66,6 +66,16 @@ const API = class {
     return this._load({url: `offers`})
       .then((response) => response.json())
       .then(Offer.parseOffers);
+  }
+
+  sync(data) {
+    return this._load({
+      url: `points/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
