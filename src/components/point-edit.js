@@ -61,10 +61,9 @@ const createPhotosMarkup = (photos) => {
   }).join(`\n`);
 };
 
-const createPointEditTemplate = (point, mode, activeOffers, offers, destinations, externalData) => {
+const createPointEditTemplate = (point, mode, activeOffers, typeOffers, offers, destinations, externalData) => {
   const {type, destination, start, end, price, description, photos, isFavorite} = point;
   const currency = `&euro;&nbsp;`;
-  const typeOffers = (offers.filter((offer) => offer.type === point.type))[0].offers;
   const eventTransferTypesMarkup = createEventTypesMarkup(TransportTypes, type);
   const eventActivityTypesMarkup = createEventTypesMarkup(ActivityTypes, type);
   const destinationsMarkup = createDestinationsListMarkup(destinations);
@@ -106,7 +105,7 @@ const createPointEditTemplate = (point, mode, activeOffers, offers, destinations
                 <label class="event__label  event__type-output" for="event-destination-1">
                   ${type[0].toUpperCase() + type.slice(1)} ${TransportTypes.includes(type) ? `to` : `at`}
                 </label>
-                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1" required>
                 <datalist id="destination-list-1">
                   ${destinationsMarkup}
                 </datalist>
@@ -116,12 +115,12 @@ const createPointEditTemplate = (point, mode, activeOffers, offers, destinations
                 <label class="visually-hidden" for="event-start-time-1">
                   From
                 </label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${start}">
+                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${start}" required>
                 &mdash;
                 <label class="visually-hidden" for="event-end-time-1">
                   To
                 </label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${end}">
+                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${end}" required>
               </div>
 
               <div class="event__field-group  event__field-group--price">
@@ -129,7 +128,7 @@ const createPointEditTemplate = (point, mode, activeOffers, offers, destinations
                   <span class="visually-hidden">Price</span>
                   ${currency}
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}" required>
               </div>
 
               <button class="event__save-btn  btn  btn--blue" type="submit">${saveButtonText}</button>
@@ -172,19 +171,21 @@ export default class PointEdit extends AbstractSmartComponent {
     this._mode = mode;
     this._offers = offers;
     this._destinations = destinations;
-    this._activeOffers = Object.assign([], point.offers);
+    this._activeOffers = point.offers;
     this._flatpickr = null;
     this._submitHandler = null;
     this._favouriteHandler = null;
     this._deleteButtonClickHandler = null;
     this._externalData = DefaultData;
 
+    this._typeOffers = (this._offers.filter((offer) => offer.type === point.type))[0].offers;
+
     this._subscribeOnEvents();
     this._applyFlatpickr();
   }
 
   getTemplate() {
-    return createPointEditTemplate(this._point, this._mode, this._activeOffers, this._offers, this._destinations, this._externalData);
+    return createPointEditTemplate(this._point, this._mode, this._activeOffers, this._typeOffers, this._offers, this._destinations, this._externalData);
   }
 
   removeElement() {
@@ -297,6 +298,7 @@ export default class PointEdit extends AbstractSmartComponent {
       type.addEventListener(`click`, (evt) => {
         this._point.type = evt.target.value;
         this._activeOffers = [];
+        this._typeOffers = (this._offers.filter((offer) => offer.type === this._point.type))[0].offers;
         this.rerender();
       });
     });
@@ -305,7 +307,7 @@ export default class PointEdit extends AbstractSmartComponent {
     if (offers) {
       offers.addEventListener(`change`, (evt) => {
         if (evt.target.checked) {
-          this._activeOffers.push(this._offers.filter((it) => it.title === evt.target.value)[0]);
+          this._activeOffers.push(this._typeOffers.filter((it) => it.title === evt.target.value)[0]);
           this.rerender();
         } else {
           const unCheckedIndex = this._activeOffers.findIndex((it) => it.title === evt.target.value);

@@ -20,6 +20,7 @@ export const EmptyPoint = {
   price: ``,
   description: ``,
   isFavorite: false,
+  offers: [],
 };
 
 const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
@@ -42,6 +43,7 @@ const parseFormData = (formData, offers, destinations) => {
   const name = formData.get(`event-destination`);
   const type = formData.get(`event-type`);
   const destination = destinations.filter((it) => it.name === name)[0];
+  const typeOffers = (offers.filter((offer) => offer.type === type))[0].offers;
 
   return new PointModel({
     "type": type,
@@ -50,7 +52,7 @@ const parseFormData = (formData, offers, destinations) => {
     "date_from": start,
     "date_to": end,
     "destination": destination,
-    "offers": getSelectedOffers(formData, offers),
+    "offers": getSelectedOffers(formData, typeOffers),
   });
 };
 

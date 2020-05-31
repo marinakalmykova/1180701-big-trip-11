@@ -599,7 +599,7 @@ main {
   top: calc(100% + 7px);
   left: -20px;
   display: none;
-  width: 180px;
+  width: 200px;
   background-color: #ffffff;
   border: 1px solid rgba(151, 151, 151, 0.169724);
   -webkit-box-shadow: 0 11px 20px rgba(0, 0, 0, 0.219146);
