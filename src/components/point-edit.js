@@ -36,7 +36,7 @@ const createDestinationsListMarkup = (destinations) => {
 const createOffersMarkup = (offers, allOffers) => {
   return allOffers
     .map((offer, index) => {
-      const isChecked = offers.filter((it) => it.title === offer.title).length > 0;
+      const isChecked = offers.length > 0 ? offers.filter((it) => it.title === offer.title).length > 0 : false;
       return (
         `<div class="event__offer-selector">
             <input class="event__offer-checkbox  visually-hidden" 
@@ -210,9 +210,6 @@ export default class PointEdit extends AbstractSmartComponent {
   }
 
   reset() {
-    // const point = this._point;
-    // this._activeOffers = Object.assign([], point.offers);
-
     this.rerender();
   }
 
@@ -233,7 +230,7 @@ export default class PointEdit extends AbstractSmartComponent {
   }
 
   getData() {
-    const form = document.querySelector(`.event--edit`);
+    const form = this.getElement();
     return new FormData(form);
   }
 
