@@ -5,9 +5,14 @@ export default class Offer {
   }
 
   toRAW() {
+    const activeOffers = this.offers.map((offer) => ({
+      title: offer.name,
+      price: offer.price,
+    }));
+
     return {
-      "type": this.type,
-      "offers": this.offers,
+      type: this.type,
+      offers: activeOffers,
     };
   }
 

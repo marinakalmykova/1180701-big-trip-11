@@ -181,6 +181,7 @@ export default class TripController {
         .then((point) => {
           const isSuccess = this._pointsModel.updatePoint(oldData.id, point);
 
+
           if (isSuccess) {
             this._updatePoints();
             this._onSortTypeChange(this._sortComponent.getSortType());

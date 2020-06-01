@@ -68,6 +68,8 @@ export default class Provider {
       return this._api.updatePoint(id, point)
         .then((newPoint) => {
           this._store.setItem(newPoint.id, newPoint.toRAW());
+
+          return newPoint;
         });
     }
 
@@ -128,8 +130,6 @@ export default class Provider {
           const createdPoints = getSyncedPoints(response.created);
           const updatedPoints = getSyncedPoints(response.updated);
 
-          // Добавляем синхронизированные задачи в хранилище.
-          // Хранилище должно быть актуальным в любой момент.
           const items = createStoreStructure([...createdPoints, ...updatedPoints]);
 
           this._store.setItems(items);

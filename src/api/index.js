@@ -41,11 +41,11 @@ const API = class {
       .then(Point.parsePoint);
   }
 
-  updatePoint(id, data) {
+  updatePoint(id, point) {
     return this._load({
       url: `points/${id}`,
       method: Method.PUT,
-      body: JSON.stringify(data.toRAW()),
+      body: JSON.stringify(point.toRAW()),
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
