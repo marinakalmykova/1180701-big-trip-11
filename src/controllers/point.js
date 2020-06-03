@@ -120,8 +120,6 @@ export default class PointController {
       this._onDataChange(this, point, newPoint, false);
     });
 
-    // this._pointEditComponent.setResetButtonClickHandler(() => this._onDataChange(this, point, null));
-
     switch (mode) {
       case Mode.DEFAULT:
         if (oldPointEditComponent && oldPointComponent) {
