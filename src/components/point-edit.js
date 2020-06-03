@@ -247,7 +247,6 @@ export default class PointEdit extends AbstractSmartComponent {
   setResetButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__reset-btn`)
       .addEventListener(`click`, handler);
-
     this._deleteButtonClickHandler = handler;
   }
 
@@ -255,7 +254,6 @@ export default class PointEdit extends AbstractSmartComponent {
     this.getElement().querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
     this._favouriteHandler = handler;
-
   }
 
   _destroyFlatpickr(fpickr) {
@@ -305,19 +303,18 @@ export default class PointEdit extends AbstractSmartComponent {
       offers.addEventListener(`change`, (evt) => {
         if (evt.target.checked) {
           this._activeOffers.push(this._typeOffers.filter((it) => it.title === evt.target.value)[0]);
-          this.rerender();
         } else {
           const unCheckedIndex = this._activeOffers.findIndex((it) => it.title === evt.target.value);
           this._activeOffers.splice(unCheckedIndex, 1);
-          this.rerender();
         }
       });
     }
 
     const destination = element.querySelector(`.event__input--destination`);
     destination.addEventListener(`change`, (evt) => {
-      this._point.destination = evt.target.value;
-      this._point.description = this._destinations.filter((it) => it.name === evt.target.value)[0].description;
+      const value = evt.target.value;
+      this._point.destination = value ? value : ``;
+      this._point.description = value ? this._destinations.filter((it) => it.name === value)[0].description : ``;
       this.rerender();
     });
 

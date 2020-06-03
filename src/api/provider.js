@@ -68,7 +68,6 @@ export default class Provider {
       return this._api.updatePoint(id, point)
         .then((newPoint) => {
           this._store.setItem(newPoint.id, newPoint.toRAW());
-
           return newPoint;
         });
     }

@@ -148,7 +148,7 @@ export default class TripController {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
-  _onDataChange(pointController, oldData, newData) {
+  _onDataChange(pointController, oldData, newData, toClose = true) {
     if (oldData === EmptyPoint) {
       this._creatingPoint = null;
       if (newData === null) {
@@ -181,8 +181,7 @@ export default class TripController {
         .then((point) => {
           const isSuccess = this._pointsModel.updatePoint(oldData.id, point);
 
-
-          if (isSuccess) {
+          if (isSuccess && toClose) {
             this._updatePoints();
             this._onSortTypeChange(this._sortComponent.getSortType());
           }
