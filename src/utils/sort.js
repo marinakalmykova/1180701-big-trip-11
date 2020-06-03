@@ -1,4 +1,5 @@
 import {SortType} from "../components/sort";
+import {getDuration} from "./common";
 
 export const getSortedPoints = (points, sortType) => {
   let sortedPoints = [];
@@ -8,7 +9,7 @@ export const getSortedPoints = (points, sortType) => {
       sortedPoints = points.slice().sort((a, b) => b.price - a.price);
       break;
     case SortType.TIME:
-      sortedPoints = points.slice().sort((a, b) => b.duration - a.duration);
+      sortedPoints = points.slice().sort((a, b) => getDuration(b) - getDuration(a));
       break;
     case SortType.EVENT:
       sortedPoints = points.slice();

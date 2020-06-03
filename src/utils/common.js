@@ -32,8 +32,12 @@ export const formatDateWithoutTime = (date) => {
   return moment(date).format(`MMM Do`);
 };
 
-export const getDuration = (end, start) => {
-  const duration = moment.duration(moment(end) - moment(start));
+export const getDuration = (point) => {
+  return moment.duration(moment(point.end) - moment(point.start));
+};
+
+export const formatDuration = (point) => {
+  const duration = getDuration(point);
   const seconds = Math.round(duration / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);

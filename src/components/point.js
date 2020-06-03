@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {getTime, getDuration} from "../utils/common";
+import {getTime, formatDuration} from "../utils/common";
 import {TransportTypes, OFFERS_LIMIT} from "../const";
 
 
@@ -24,7 +24,7 @@ const createPointTemplate = (point) => {
   const {type, destination, start, end, price, offers} = point;
   const startTime = getTime(start);
   const endTime = getTime(end);
-  const tripDuration = getDuration(end, start);
+  const tripDuration = formatDuration(point);
   const currency = `&euro;&nbsp;`;
   const hasOffers = Array.isArray(offers) && offers.length;
 
